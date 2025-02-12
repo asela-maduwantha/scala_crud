@@ -14,6 +14,12 @@ class BookRoutes(bookService: BookService)(implicit ec: ExecutionContext) {
 
   val routes = pathPrefix("books") {
     pathEndOrSingleSlash {
+      get{
+        onSuccess(bookService.readAll()){ books : Seq[Book]=>
+          complete((StatusCodes.OK, books))
+        }
+
+      }~
         post {
           entity(as[Book]) { book =>
             onSuccess(bookService.create(book)) { id =>
